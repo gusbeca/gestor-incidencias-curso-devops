@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    container_name: db_incidencias
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: incidencias
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d incidencias"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: app_incidencias
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:80"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://dev:devpass@db:5432/incidencias

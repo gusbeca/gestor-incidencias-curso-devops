@@ -2,7 +2,7 @@
 FROM python:3.11-slim AS build
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN pip install --user -r requirements.txt pytest httpx
 
 # Stage 2: runtime
 FROM python:3.11-slim
